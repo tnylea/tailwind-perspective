@@ -1,0 +1,32 @@
+This application is going to be a Perspective 3d transform visualizer, similar to this online tool: https://www.cssportal.com/css-3d-transform-generator/
+
+TailwindCSS v4 has this new perspective and 3d tranform utilities below:
+
+https://tailwindcss.com/docs/perspective
+https://tailwindcss.com/docs/perspective-origin
+https://tailwindcss.com/docs/rotate
+https://tailwindcss.com/docs/scale
+https://tailwindcss.com/docs/skew
+https://tailwindcss.com/docs/transform
+https://tailwindcss.com/docs/translate
+
+I want to create a stage that shows a square. On the bottom right is going to be a set of sliders that will change the following values:
+
+- rotateZ
+- rotateX
+- rotateY
+
+I then want a Tag group of buttons https://ui.shadcn.com/docs/components/tabs, which will toggle the perspective with these tailwind classes:
+
+perspective-dramatic
+perspective-near
+perspective-normal
+perspective-midrange
+perspective-distant
+perspective-none
+
+I want the user to be able to toggle these perspective states and have them toggled with the element on the stage, the square on the stage. The user will also be able to slide the sliders to change the rotateZ, rotateX, and rotateY values of the square on the stage.
+
+This project is built using React, Vite, TailwindCSS, Typescript, and Shadcn UI.
+
+Please help me create this simple tool for visualizing 3d transforms in Tailwind.
