@@ -11,7 +11,6 @@ export function Info() {
                 </div>
                 
             </div>
-            
         </div>
     )
 }
