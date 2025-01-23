@@ -91,10 +91,19 @@
     }
 }
 
-@layer base {
-    .border-color {
-        @apply border-pink-400;
-    }
 
-    @apply border-pink-600;
+*,
+::after,
+::before,
+::backdrop,
+::file-selector-button {
+    border-color: #f1f1f9;
+}
+
+.ToastViewport {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 400px;
+    /* adjust the width as needed */
 }

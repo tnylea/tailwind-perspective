@@ -9,6 +9,9 @@ import {
     AccordionItem,
     AccordionTrigger,
 } from "@/components/ui/accordion"
+import { useToast } from "@/hooks/use-toast"
+import { Clipboard, ClipboardCheck } from "lucide-react"
+import { useState } from 'react'
 
 type Perspective = 'dramatic' | 'near' | 'normal' | 'midrange' | 'distant' | 'none'
 type AspectRatio = 'auto' | 'square' | 'video'
@@ -63,6 +66,32 @@ const aspectRatios = [
     { value: "video", label: "16:9" },
 ] as const
 
+function generateCode(props: {
+    perspective: Perspective
+    rotations: Rotations
+    transforms: Transforms
+    backfaceVisible: boolean
+    size: Size
+}) {
+    const { perspective, rotations, transforms, backfaceVisible, size } = props
+    
+    const transformClasses = [
+        transforms.translateX !== 0 && `translate-x-[${transforms.translateX}px]`,
+        transforms.translateY !== 0 && `translate-y-[${transforms.translateY}px]`,
+        transforms.scaleX !== 1 && `scale-x-[${transforms.scaleX}]`,
+        transforms.scaleY !== 1 && `scale-y-[${transforms.scaleY}]`,
+        transforms.skewX !== 0 && `skew-x-[${transforms.skewX}deg]`,
+        transforms.skewY !== 0 && `skew-y-[${transforms.skewY}deg]`,
+        rotations.rotateX !== 0 && `rotate-x-[${rotations.rotateX}deg]`,
+        rotations.rotateY !== 0 && `rotate-y-[${rotations.rotateY}deg]`,
+        rotations.rotateZ !== 0 && `rotate-z-[${rotations.rotateZ}deg]`,
+    ].filter(Boolean).join(' ')
+
+    return `<div class="perspective-${perspective}">
+  <div class="w-[${size.width}px] h-[${size.height}px] ${transformClasses} ${!backfaceVisible ? 'backface-hidden' : ''} bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl"></div>
+</div>`
+}
+
 export function Controls({ 
     perspective, 
     onPerspectiveChange,
@@ -77,6 +106,9 @@ export function Controls({
     transforms,
     onTransformsChange
 }: ControlsProps) {
+    const { toast } = useToast()
+    const [isCopied, setIsCopied] = useState(false)
+
     const handleRotationChange = (axis: keyof Rotations) => (value: number[]) => {
         onRotationsChange({
             ...rotations,
@@ -109,10 +141,45 @@ export function Controls({
         })
     }
 
+    const handleCopy = () => {
+        const code = generateCode({
+            perspective,
+            rotations,
+            transforms,
+            backfaceVisible,
+            size: {
+                width: size.width,
+                height: aspectRatio === 'auto' 
+                    ? size.height 
+                    : aspectRatio === 'square' 
+                        ? size.width 
+                        : Math.round(size.width * (9/16))
+            }
+        })
+        navigator.clipboard.writeText(code)
+        toast({
+            title: "Code copied!",
+            description: "Paste into your project or a Tailwind Play",
+            duration: 4000,
+        })
+        setIsCopied(true)
+        setTimeout(() => {
+            setIsCopied(false)
+        }, 4000)
+    }
+
     return (
         <div className="absolute bottom-0 right-0 p-4 max-h-screen flex flex-col">
             <div className="flex flex-col relative bg-white/80 backdrop-blur-sm overflow-hidden h-full rounded-lg border border-stone-200 shadow-lg w-full max-w-md">
-                <div className="p-4 font-medium border-b text-sm border-stone-200">Controls</div>
+                <div className="p-4 font-medium border-b text-sm border-stone-200 flex justify-between items-center">
+                    <span>Controls</span>
+                    <button
+                        onClick={handleCopy}
+                        className="p-2 text-xs bg-stone-50 hover:bg-stone-200 text-stone-500 hover:text-stone-800 rounded-md cursor-pointer transition-colors"
+                    >
+                        {isCopied ? <ClipboardCheck className="w-4 h-4" /> : <Clipboard className="w-4 h-4" />}
+                    </button>
+                </div>
                 <div className="relative w-full h-full overflow-scroll">
                     {/* Perspective Controls */}
                     <div className="flex flex-col gap-4 mt-1 p-4">

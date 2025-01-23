@@ -2,6 +2,7 @@ import { useState } from 'react'
 import './App.css'
 import { Stage } from './components/stage'
 import { Controls } from './components/controls'
+import { Toaster } from "@/components/ui/toaster"
 
 type Perspective = 'dramatic' | 'near' | 'normal' | 'midrange' | 'distant' | 'none'
 type AspectRatio = 'auto' | 'square' | 'video'
@@ -54,28 +55,31 @@ function App() {
 
   return (
     <div className="fixed inset-0 overflow-hidden">
-      <Stage 
-        perspective={perspective} 
-        rotations={rotations}
-        transforms={transforms}
-        backfaceVisible={backfaceVisible}
-        width={size.width}
-        height={calculatedHeight}
-      />
-      <Controls 
-        perspective={perspective} 
-        onPerspectiveChange={setPerspective}
-        rotations={rotations}
-        onRotationsChange={setRotations}
-        transforms={transforms}
-        onTransformsChange={setTransforms}
-        backfaceVisible={backfaceVisible}
-        onBackfaceVisibleChange={setBackfaceVisible}
-        size={size}
-        onSizeChange={setSize}
-        aspectRatio={aspectRatio}
-        onAspectRatioChange={setAspectRatio}
-      />
+      <main>
+        <Stage 
+          perspective={perspective} 
+          rotations={rotations}
+          transforms={transforms}
+          backfaceVisible={backfaceVisible}
+          width={size.width}
+          height={calculatedHeight}
+        />
+        <Controls 
+          perspective={perspective} 
+          onPerspectiveChange={setPerspective}
+          rotations={rotations}
+          onRotationsChange={setRotations}
+          transforms={transforms}
+          onTransformsChange={setTransforms}
+          backfaceVisible={backfaceVisible}
+          onBackfaceVisibleChange={setBackfaceVisible}
+          size={size}
+          onSizeChange={setSize}
+          aspectRatio={aspectRatio}
+          onAspectRatioChange={setAspectRatio}
+        />
+        <Toaster />
+      </main>
     </div>
   )
 }
