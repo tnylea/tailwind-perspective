@@ -72,8 +72,9 @@ function generateCode(props: {
     transforms: Transforms
     backfaceVisible: boolean
     size: Size
+    aspectRatio: AspectRatio
 }) {
-    const { perspective, rotations, transforms, backfaceVisible, size } = props
+    const { perspective, rotations, transforms, backfaceVisible, size, aspectRatio } = props
     
     const transformClasses = [
         transforms.translateX !== 0 && `translate-x-[${transforms.translateX}px]`,
@@ -87,8 +88,11 @@ function generateCode(props: {
         rotations.rotateZ !== 0 && `rotate-z-[${rotations.rotateZ}deg]`,
     ].filter(Boolean).join(' ')
 
-    return `<div class="perspective-${perspective}">
-  <div class="w-[${size.width}px] h-[${size.height}px] ${transformClasses} ${!backfaceVisible ? 'backface-hidden' : ''} bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl"></div>
+    // Add aspect ratio class if not set to auto
+    const aspectRatioClass = aspectRatio === 'square' ? 'aspect-square' : aspectRatio === 'video' ? 'aspect-video' : ''
+
+    return `<div class="relative perspective-${perspective}">
+  <div class="w-[${size.width}px] h-[${aspectRatio === 'auto' ? size.height : 'auto'}px] ${aspectRatioClass} ${transformClasses} ${!backfaceVisible ? 'backface-hidden' : ''} bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl"></div>
 </div>`
 }
 
@@ -147,6 +151,7 @@ export function Controls({
             rotations,
             transforms,
             backfaceVisible,
+            aspectRatio,
             size: {
                 width: size.width,
                 height: aspectRatio === 'auto' 

@@ -20,11 +20,11 @@ type StageProps = {
 
 export function Stage({ perspective, rotations, transforms, backfaceVisible, width, height }: StageProps) {
     return (
-        <div id="stage" className={`relative w-full h-full min-h-screen bg-gray-50 grid place-items-center perspective-${perspective}`}>
+        <div id="stage" className="relative w-full h-full min-h-screen bg-gray-50 grid place-items-center">
             {/* Grid background */}
             <div className="fixed inset-0 bg-[linear-gradient(to_right,#e5e7eb_1px,transparent_1px),linear-gradient(to_bottom,#e5e7eb_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
             
-            <div id="container">
+            <div id="container" className={`relative perspective-${perspective}`}>
                 {/* Centered block */}
                 <div 
                     id="box" 
