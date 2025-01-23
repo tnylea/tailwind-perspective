@@ -76,24 +76,45 @@ function generateCode(props: {
 }) {
     const { perspective, rotations, transforms, backfaceVisible, size, aspectRatio } = props
     
-    const transformClasses = [
-        transforms.translateX !== 0 && `translate-x-[${transforms.translateX}px]`,
-        transforms.translateY !== 0 && `translate-y-[${transforms.translateY}px]`,
-        transforms.scaleX !== 1 && `scale-x-[${transforms.scaleX}]`,
-        transforms.scaleY !== 1 && `scale-y-[${transforms.scaleY}]`,
-        transforms.skewX !== 0 && `skew-x-[${transforms.skewX}deg]`,
-        transforms.skewY !== 0 && `skew-y-[${transforms.skewY}deg]`,
-        rotations.rotateX !== 0 && `rotate-x-[${rotations.rotateX}deg]`,
-        rotations.rotateY !== 0 && `rotate-y-[${rotations.rotateY}deg]`,
-        rotations.rotateZ !== 0 && `rotate-z-[${rotations.rotateZ}deg]`,
-    ].filter(Boolean).join(' ')
+    const classes = [
+        'relative',
+        'rounded-xl',
+        'bg-gradient-to-br',
+        'from-blue-500',
+        'to-blue-600',
+        !backfaceVisible && 'backface-hidden',
+        // Only add aspect ratio class if not auto
+        aspectRatio === 'square' && 'aspect-square',
+        aspectRatio === 'video' && 'aspect-video',
+    ].filter(Boolean)
 
-    // Add aspect ratio class if not set to auto
-    const aspectRatioClass = aspectRatio === 'square' ? 'aspect-square' : aspectRatio === 'video' ? 'aspect-video' : ''
+    const transform = [
+        `translate(${transforms.translateX}px, ${transforms.translateY}px)`,
+        `scale(${transforms.scaleX}, ${transforms.scaleY})`,
+        `skew(${transforms.skewX}deg, ${transforms.skewY}deg)`,
+        `rotateX(${rotations.rotateX}deg)`,
+        `rotateY(${rotations.rotateY}deg)`,
+        `rotateZ(${rotations.rotateZ}deg)`
+    ].join(' ')
 
-    return `<div class="relative perspective-${perspective}">
-  <div class="w-[${size.width}px] h-[${aspectRatio === 'auto' ? size.height : 'auto'}px] ${aspectRatioClass} ${transformClasses} ${!backfaceVisible ? 'backface-hidden' : ''} bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl"></div>
-</div>`
+    const style = {
+        width: size.width + 'px',
+        height: aspectRatio === 'auto' ? size.height + 'px' : 'auto',
+        transform
+    }
+
+    const styleString = Object.entries(style)
+        .map(([key, value]) => `${key}: ${value}`)
+        .join('; ')
+
+    const containerClasses = ['relative', `perspective-${perspective}`].join(' ')
+    const elementClasses = classes.join(' ')
+
+    return [
+        '<div class="' + containerClasses + '">',
+        '  <div class="' + elementClasses + '" style="' + styleString + '"></div>',
+        '</div>'
+    ].join('\n')
 }
 
 export function Controls({ 
