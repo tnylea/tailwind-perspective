@@ -3,6 +3,7 @@ import './App.css'
 import { Stage } from './components/stage'
 import { Controls } from './components/controls'
 import { Toaster } from "@/components/ui/toaster"
+import { Info } from './components/info'
 
 type Perspective = 'dramatic' | 'near' | 'normal' | 'midrange' | 'distant' | 'none'
 type AspectRatio = 'auto' | 'square' | 'video'
@@ -56,6 +57,7 @@ function App() {
   return (
     <div className="fixed inset-0 overflow-hidden">
       <main>
+        <Info />
         <Stage 
           perspective={perspective} 
           rotations={rotations}
